@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative './cube_helpers'
 
 describe Cube do
