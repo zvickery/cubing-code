@@ -15,8 +15,9 @@ module CubeHelpers
     expect(@cube).to be_an_instance_of Cube
   end
 
-  def build_test_output(expected)
-    expected.map { |i| [i].repeated_combination(@dimension).to_a }.flatten.join(' ')
+  def single_color_per_face(expected)
+    m = expected.map { |i| [i].repeated_combination(@dimension).to_a }
+    m.flatten.join(' ')
   end
 
   def validate_dump
@@ -47,13 +48,48 @@ module CubeHelpers
     validate_move(%w(Z'), %w(\  G), %w(R W O Y), %w(\  B))
   end
 
+  def validate_f_move(invert = false)
+    @moves.make_move(invert ? %w(F') : %w(F))
+    output = @cube.dump_cube
+    expect(output).to be_an_instance_of Array
+
+    (0..@dimension - 2).each do |index|
+      expect(output[index]).to eq(single_color_per_face(%w(\  R)))
+    end
+    color = invert ? %w(\  G) : %w(\  B)
+    expect(output[@dimension - 1]).to eq(single_color_per_face(color))
+
+    r = @dimension
+    (0..@dimension - 1).each do |index|
+      expect(output[r + index]).to eq(f_rotation_pattern(invert))
+    end
+
+    r = @dimension * 2
+    color = invert ? %w(\  B) : %w(\  G)
+    expect(output[r]).to eq(single_color_per_face(color))
+    (1..@dimension - 2).each do |index|
+      expect(output[r + index]).to eq(single_color_per_face(%w(\  O)))
+    end
+  end
+
+  def f_rotation_pattern(invert = false)
+    pieces = []
+    (0..@dimension - 2).each { |_| pieces.push('B') }
+    pieces.push(invert ? 'R' : 'O')
+    (0..@dimension - 1).each { |_| pieces.push('W') }
+    pieces.push(invert ? 'O' : 'R')
+    (0..@dimension - 2).each { |_| pieces.push('G') }
+    (0..@dimension - 1).each { |_| pieces.push('Y') }
+    pieces.join(' ')
+  end
+
   def validate_move(move, top, middle, bottom)
     @moves.make_move(move)
     output = @cube.dump_cube
     expect(output).to be_an_instance_of Array
-    expect(output[0]).to eq(build_test_output(top))
-    expect(output[@dimension]).to eq(build_test_output(middle))
-    expect(output[@dimension * 2]).to eq(build_test_output(bottom))
+    expect(output[0]).to eq(single_color_per_face(top))
+    expect(output[@dimension]).to eq(single_color_per_face(middle))
+    expect(output[@dimension * 2]).to eq(single_color_per_face(bottom))
   end
 end
 
@@ -103,6 +139,18 @@ shared_examples_for Cube do
   describe '#z_invert_move' do
     it "validates Z' move" do
       validate_z_invert_move
+    end
+  end
+
+  describe '#f_move' do
+    it 'validates F move' do
+      validate_f_move(false)
+    end
+  end
+
+  describe '#f_invert_move' do
+    it "validates F' move" do
+      validate_f_move(true)
     end
   end
 end

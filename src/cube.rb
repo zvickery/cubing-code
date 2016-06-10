@@ -1,6 +1,6 @@
 # A cube face, containing color and adjacency
 class Face
-  attr_accessor :color, :pieces
+  attr_accessor :pieces
 
   def initialize(dimension, color)
     @dimension = dimension
@@ -22,7 +22,7 @@ end
 
 # The cube itself!
 class Cube
-  attr_accessor :front, :back, :left, :right, :up, :down
+  attr_accessor :dimension, :front, :back, :left, :right, :up, :down
 
   def initialize(dimension)
     @dimension = dimension
@@ -66,7 +66,7 @@ class Cube
   def build_padded_rows
     rows = []
 
-    (0..@dimension**2 - 1).each do |i|
+    (0..@dimension * 3 - 1).each do |i|
       rows.push([])
 
       # Now pad the output for U and D facew
