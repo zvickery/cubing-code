@@ -94,6 +94,26 @@ module CubeHelpers
     expect(output[r + @dimension - 1]).to eq(single_color_per_face(color))
   end
 
+  def validate_r_move(invert = false)
+    @moves.make_move(invert ? %w(R') : %w(R))
+    output = @cube.dump_cube
+    expect(output).to be_an_instance_of Array
+
+    (0..@dimension - 1).each do |index|
+      expect(output[index]).to eq(r_rotation_pattern_one(true, invert))
+    end
+
+    r = @dimension
+    (0..@dimension - 1).each do |index|
+      expect(output[r + index]).to eq(r_rotation_pattern_four(invert))
+    end
+
+    r = @dimension * 2
+    (0..@dimension - 1).each do |index|
+      expect(output[r + index]).to eq(r_rotation_pattern_one(false, invert))
+    end
+  end
+
   def validate_move(move, top, middle, bottom)
     @moves.make_move(move)
     output = @cube.dump_cube
@@ -174,6 +194,18 @@ shared_examples_for Cube do
   describe '#b_invert_move' do
     it "validates B' move" do
       validate_b_move(true)
+    end
+  end
+
+  describe '#r_move' do
+    it 'validates R move' do
+      validate_r_move(false)
+    end
+  end
+
+  describe '#r_invert_move' do
+    it "validates R' move" do
+      validate_r_move(true)
     end
   end
 end

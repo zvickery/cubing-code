@@ -1,4 +1,7 @@
 require 'logger'
+require_relative 'moves/b_move.rb'
+require_relative 'moves/f_move.rb'
+require_relative 'moves/r_move.rb'
 
 # Defines moves for arbitrary dimensioned cubes.
 class CubeMoves
@@ -23,20 +26,21 @@ class CubeMoves
   end
 
   def add_moves
-    @moves['X'] = -> { move_x }
-    @moves["X'"] = add_3x_move(@moves['X'])
-    @moves['Y'] = -> { move_y }
-    @moves["Y'"] = add_3x_move(@moves['Y'])
-    @moves['Z'] = -> { move_z }
-    @moves["Z'"] = add_3x_move(@moves['Z'])
-    @moves['F'] = -> { move_f }
-    @moves["F'"] = add_3x_move(@moves['F'])
-    @moves['B'] = -> { move_b }
-    @moves["B'"] = add_3x_move(@moves['B'])
+    add_move('X', -> { move_x })
+    add_move('Y', -> { move_y })
+    add_move('Z', -> { move_z })
+    add_move('F', -> { move_f })
+    add_move('B', -> { move_b })
+    add_move('R', -> { move_r })
   end
 
   def add_3x_move(move)
     -> { Array.new(3).each { move[] } }
+  end
+
+  def add_move(code, function)
+    @moves[code] = function
+    @moves["#{code}'"] = add_3x_move(@moves[code])
   end
 
   def move_x
@@ -67,62 +71,17 @@ class CubeMoves
   end
 
   def move_f
-    @logger.info('making a F move')
-    tmp = []
-    dim = @cube.dimension - 1
-    dim.downto(0).each do |i|
-      tmp.push(@cube.left.pieces[i][dim])
-    end
-
-    # Build new left face
-    (0..dim).each do |i|
-      @cube.left.pieces[i][dim] = @cube.down.pieces[0][i]
-    end
-
-    # Build new down face
-    (0..dim).each do |i|
-      rev = (i + dim + (dim - 1) * i) % dim + 1
-      @cube.down.pieces[0][i] = @cube.right.pieces[rev][0]
-    end
-
-    # Build new right face
-    (0..dim).each do |i|
-      @cube.right.pieces[i][0] = @cube.up.pieces[dim][i]
-    end
-
-    # Build new up face
-    (0..dim).each do |i|
-      @cube.up.pieces[dim][i] = tmp[i]
-    end
+    f = FMove.new(@cube, @logger)
+    f.move
   end
 
   def move_b
-    @logger.info('making a B move')
-    tmp = []
-    dim = @cube.dimension - 1
-    (0..dim).each do |i|
-      tmp.push(@cube.left.pieces[i][0])
-    end
+    b = BMove.new(@cube, @logger)
+    b.move
+  end
 
-    # Build new left face
-    (0..dim).each do |i|
-      @cube.left.pieces[i][0] = @cube.up.pieces[0][i]
-    end
-
-    # Build new up face
-    (0..dim).each do |i|
-      @cube.up.pieces[0][i] = @cube.right.pieces[i][dim]
-    end
-
-    # Build new right face
-    (0..dim).each do |i|
-      rev = (i + dim + (dim - 1) * i) % dim + 1
-      @cube.right.pieces[i][dim] = @cube.down.pieces[dim][rev]
-    end
-
-    # Build new down face
-    (0..dim).each do |i|
-      @cube.down.pieces[dim][i] = tmp[i]
-    end
+  def move_r
+    r = RMove.new(@cube, @logger)
+    r.move
   end
 end
