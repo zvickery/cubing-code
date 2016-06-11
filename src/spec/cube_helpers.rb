@@ -2,9 +2,12 @@
 
 require_relative '../cube'
 require_relative '../cube_moves'
+require 'cube_patterns'
 
 # Helper methods for generic dimension cube testing.
 module CubeHelpers
+  include CubePatterns
+
   def build_cube(dimension)
     @dimension = dimension
     @cube = Cube.new(@dimension)
@@ -13,11 +16,6 @@ module CubeHelpers
 
   def validate_cube
     expect(@cube).to be_an_instance_of Cube
-  end
-
-  def single_color_per_face(expected)
-    m = expected.map { |i| [i].repeated_combination(@dimension).to_a }
-    m.flatten.join(' ')
   end
 
   def validate_dump
@@ -72,15 +70,28 @@ module CubeHelpers
     end
   end
 
-  def f_rotation_pattern(invert = false)
-    pieces = []
-    (0..@dimension - 2).each { |_| pieces.push('B') }
-    pieces.push(invert ? 'R' : 'O')
-    (0..@dimension - 1).each { |_| pieces.push('W') }
-    pieces.push(invert ? 'O' : 'R')
-    (0..@dimension - 2).each { |_| pieces.push('G') }
-    (0..@dimension - 1).each { |_| pieces.push('Y') }
-    pieces.join(' ')
+  def validate_b_move(invert = false)
+    @moves.make_move(invert ? %w(B') : %w(B))
+    output = @cube.dump_cube
+    expect(output).to be_an_instance_of Array
+
+    color = invert ? %w(\  B) : %w(\  G)
+    expect(output[0]).to eq(single_color_per_face(color))
+    (1..@dimension - 2).each do |index|
+      expect(output[index]).to eq(single_color_per_face(%w(\  R)))
+    end
+
+    r = @dimension
+    (0..@dimension - 1).each do |index|
+      expect(output[r + index]).to eq(b_rotation_pattern(invert))
+    end
+
+    r = @dimension * 2
+    (0..@dimension - 2).each do |index|
+      expect(output[r + index]).to eq(single_color_per_face(%w(\  O)))
+    end
+    color = invert ? %w(\  G) : %w(\  B)
+    expect(output[r + @dimension - 1]).to eq(single_color_per_face(color))
   end
 
   def validate_move(move, top, middle, bottom)
@@ -151,6 +162,18 @@ shared_examples_for Cube do
   describe '#f_invert_move' do
     it "validates F' move" do
       validate_f_move(true)
+    end
+  end
+
+  describe '#b_move' do
+    it 'validates B move' do
+      validate_b_move(false)
+    end
+  end
+
+  describe '#b_invert_move' do
+    it "validates B' move" do
+      validate_b_move(true)
     end
   end
 end
