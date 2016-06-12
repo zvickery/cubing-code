@@ -14,6 +14,6 @@ task :test do
 end
 
 task :lint_task, [:params] do |_, params|
-  sh 'ruby -c */*.rb'
+  sh 'ruby -w -c */*.rb'
   sh "rubocop -DE #{params.first[1]}"
 end

@@ -18,6 +18,10 @@ module CubeHelpers
     expect(@cube).to be_an_instance_of Cube
   end
 
+  def validate_bad_move
+    expect { @moves.make_move(['A']) }.to raise_error(ArgumentError)
+  end
+
   def validate_dump
     validate_move(nil, %w(\  R), %w(B W G Y), %w(\  O))
   end
@@ -128,6 +132,12 @@ shared_examples_for Cube do
   describe '#new' do
     it 'validates cube construction' do
       validate_cube
+    end
+  end
+
+  describe 'bad move' do
+    it 'validates bad move' do
+      validate_bad_move
     end
   end
 

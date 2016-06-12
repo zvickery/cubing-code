@@ -18,7 +18,9 @@ class CubeMoves
 
     return unless moves
 
-    # TODO: validate move string
+    moves.each do |move|
+      raise ArgumentError, "Move #{move} unrecognized" unless @moves.key?(move)
+    end
 
     moves.each do |move|
       @moves[move].call
