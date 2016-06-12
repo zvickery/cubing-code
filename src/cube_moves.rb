@@ -34,6 +34,7 @@ class CubeMoves
     add_move('F', -> { move_f })
     add_move('B', -> { move_b })
     add_move('R', -> { move_r })
+    add_move('L', -> { move_l })
   end
 
   def add_3x_move(move)
@@ -85,5 +86,10 @@ class CubeMoves
   def move_r
     r = RMove.new(@cube, @logger)
     r.move
+  end
+
+  def move_l
+    l = LMove.new(@cube, @logger)
+    l.move
   end
 end
