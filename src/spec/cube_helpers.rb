@@ -2,6 +2,7 @@
 
 require_relative '../cube'
 require_relative '../cube_moves'
+require_relative 'moves/l_move'
 require 'cube_patterns'
 
 # Helper methods for generic dimension cube testing.
@@ -119,23 +120,7 @@ module CubeHelpers
   end
 
   def validate_l_move(invert = false)
-    @moves.make_move(invert ? %w(L') : %w(L))
-    output = @cube.dump_cube
-    expect(output).to be_an_instance_of Array
-
-    (0..@dimension - 1).each do |index|
-      expect(output[index]).to eq(l_rotation_pattern_one(true, invert))
-    end
-
-    r = @dimension
-    (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(l_rotation_pattern_four(invert))
-    end
-
-    r = @dimension * 2
-    (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(l_rotation_pattern_one(false, invert))
-    end
+    LMoveTest.new(@cube, @moves).validate_l_move(invert)
   end
 
   def validate_move(move, top, middle, bottom)
