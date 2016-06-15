@@ -1,10 +1,5 @@
 # Validate the L move
-class LMoveTest
-  def initialize(cube, moves)
-    @cube = cube
-    @moves = moves
-  end
-
+shared_context 'LMoveTest' do
   def validate_l_move(invert = false)
     @moves.make_move(invert ? %w(L') : %w(L))
     output = @cube.dump_cube

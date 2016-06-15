@@ -2,7 +2,10 @@
 
 require_relative '../cube'
 require_relative '../cube_moves'
+require_relative 'moves/b_move'
+require_relative 'moves/f_move'
 require_relative 'moves/l_move'
+require_relative 'moves/r_move'
 require 'cube_patterns'
 
 # Helper methods for generic dimension cube testing.
@@ -49,78 +52,6 @@ module CubeHelpers
 
   def validate_z_invert_move
     validate_move(%w(Z'), %w(\  G), %w(R W O Y), %w(\  B))
-  end
-
-  def validate_f_move(invert = false)
-    @moves.make_move(invert ? %w(F') : %w(F))
-    output = @cube.dump_cube
-    expect(output).to be_an_instance_of Array
-
-    (0..@dimension - 2).each do |index|
-      expect(output[index]).to eq(single_color_per_face(%w(\  R)))
-    end
-    color = invert ? %w(\  G) : %w(\  B)
-    expect(output[@dimension - 1]).to eq(single_color_per_face(color))
-
-    r = @dimension
-    (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(f_rotation_pattern(invert))
-    end
-
-    r = @dimension * 2
-    color = invert ? %w(\  B) : %w(\  G)
-    expect(output[r]).to eq(single_color_per_face(color))
-    (1..@dimension - 2).each do |index|
-      expect(output[r + index]).to eq(single_color_per_face(%w(\  O)))
-    end
-  end
-
-  def validate_b_move(invert = false)
-    @moves.make_move(invert ? %w(B') : %w(B))
-    output = @cube.dump_cube
-    expect(output).to be_an_instance_of Array
-
-    color = invert ? %w(\  B) : %w(\  G)
-    expect(output[0]).to eq(single_color_per_face(color))
-    (1..@dimension - 2).each do |index|
-      expect(output[index]).to eq(single_color_per_face(%w(\  R)))
-    end
-
-    r = @dimension
-    (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(b_rotation_pattern(invert))
-    end
-
-    r = @dimension * 2
-    (0..@dimension - 2).each do |index|
-      expect(output[r + index]).to eq(single_color_per_face(%w(\  O)))
-    end
-    color = invert ? %w(\  G) : %w(\  B)
-    expect(output[r + @dimension - 1]).to eq(single_color_per_face(color))
-  end
-
-  def validate_r_move(invert = false)
-    @moves.make_move(invert ? %w(R') : %w(R))
-    output = @cube.dump_cube
-    expect(output).to be_an_instance_of Array
-
-    (0..@dimension - 1).each do |index|
-      expect(output[index]).to eq(r_rotation_pattern_one(true, invert))
-    end
-
-    r = @dimension
-    (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(r_rotation_pattern_four(invert))
-    end
-
-    r = @dimension * 2
-    (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(r_rotation_pattern_one(false, invert))
-    end
-  end
-
-  def validate_l_move(invert = false)
-    LMoveTest.new(@cube, @moves).validate_l_move(invert)
   end
 
   def validate_move(move, top, middle, bottom)
@@ -189,48 +120,56 @@ shared_examples_for Cube do
   end
 
   describe '#f_move' do
+    include_context 'FMoveTest'
     it 'validates F move' do
       validate_f_move(false)
     end
   end
 
   describe '#f_invert_move' do
+    include_context 'FMoveTest'
     it "validates F' move" do
       validate_f_move(true)
     end
   end
 
   describe '#b_move' do
+    include_context 'BMoveTest'
     it 'validates B move' do
       validate_b_move(false)
     end
   end
 
   describe '#b_invert_move' do
+    include_context 'BMoveTest'
     it "validates B' move" do
       validate_b_move(true)
     end
   end
 
   describe '#r_move' do
+    include_context 'RMoveTest'
     it 'validates R move' do
       validate_r_move(false)
     end
   end
 
   describe '#r_invert_move' do
+    include_context 'RMoveTest'
     it "validates R' move" do
       validate_r_move(true)
     end
   end
 
   describe '#l_move' do
+    include_context 'LMoveTest'
     it 'validates L move' do
       validate_l_move(false)
     end
   end
 
   describe '#l_invert_move' do
+    include_context 'LMoveTest'
     it "validates L' move" do
       validate_l_move(true)
     end
