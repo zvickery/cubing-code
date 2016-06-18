@@ -1,8 +1,10 @@
 require 'logger'
 require_relative 'moves/b_move'
+require_relative 'moves/d_move'
 require_relative 'moves/f_move'
 require_relative 'moves/l_move'
 require_relative 'moves/r_move'
+require_relative 'moves/u_move'
 require_relative 'moves/x_move'
 require_relative 'moves/y_move'
 require_relative 'moves/z_move'
@@ -39,6 +41,8 @@ class CubeMoves
     add_move('B', -> { BMove.new(@cube, @logger).move })
     add_move('R', -> { RMove.new(@cube, @logger).move })
     add_move('L', -> { LMove.new(@cube, @logger).move })
+    add_move('U', -> { UMove.new(@cube, @logger).move })
+    add_move('D', -> { DMove.new(@cube, @logger).move })
   end
 
   def add_3x_move(move)

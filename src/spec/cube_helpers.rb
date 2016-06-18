@@ -3,9 +3,11 @@
 require_relative '../cube'
 require_relative '../cube_moves'
 require_relative 'moves/b_move'
+require_relative 'moves/d_move'
 require_relative 'moves/f_move'
 require_relative 'moves/l_move'
 require_relative 'moves/r_move'
+require_relative 'moves/u_move'
 require 'cube_patterns'
 
 # Helper methods for generic dimension cube testing.
@@ -172,6 +174,34 @@ shared_examples_for Cube do
     include_context 'LMoveTest'
     it "validates L' move" do
       validate_l_move(true)
+    end
+  end
+
+  describe '#u_move' do
+    include_context 'UMoveTest'
+    it 'validates U move' do
+      validate_u_move(false)
+    end
+  end
+
+  describe '#u_invert_move' do
+    include_context 'UMoveTest'
+    it "validates U' move" do
+      validate_u_move(true)
+    end
+  end
+
+  describe '#d_move' do
+    include_context 'DMoveTest'
+    it 'validates D move' do
+      validate_d_move(false)
+    end
+  end
+
+  describe '#d_invert_move' do
+    include_context 'DMoveTest'
+    it "validates D' move" do
+      validate_d_move(true)
     end
   end
 end
