@@ -45,12 +45,13 @@ class CubeMoves
     add_move('D', -> { DMove.new(@cube, @logger).move })
   end
 
-  def add_3x_move(move)
-    -> { Array.new(3).each { move[] } }
+  def add_multi_move(move, count)
+    -> { Array.new(count).each { move[] } }
   end
 
   def add_move(code, function)
     @moves[code] = function
-    @moves["#{code}'"] = add_3x_move(@moves[code])
+    @moves["#{code}2"] = add_multi_move(@moves[code], 2)
+    @moves["#{code}'"] = add_multi_move(@moves[code], 3)
   end
 end

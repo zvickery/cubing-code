@@ -1,6 +1,6 @@
 # Validate the D move
 shared_context 'DMoveTest' do
-  def validate_d_move(invert = false)
+  def validate_d_move(invert = false, double = false)
     @moves.make_move(invert ? %w(D') : %w(D))
     output = @cube.dump_cube
     expect(output).to be_an_instance_of Array
@@ -21,12 +21,14 @@ shared_context 'DMoveTest' do
     end
   end
 
-  def d_rotation_pattern(invert = false)
+  def d_rotation_pattern(invert = false, double = false)
     pieces = []
     colors = %w(Y B W G)
 
-    # Circular shift twice for invert
-    if invert
+    # Circular shift once for double, twice for invert
+    if double
+      colors.unshift(colors.pop)
+    elsif invert
       (0..1).each do |_|
         colors.push(colors.shift)
       end

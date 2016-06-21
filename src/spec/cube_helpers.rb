@@ -64,6 +64,38 @@ module CubeHelpers
     expect(output[@dimension]).to eq(single_color_per_face(middle))
     expect(output[@dimension * 2]).to eq(single_color_per_face(bottom))
   end
+
+  def validate_checkerboard_move
+    @moves.make_move(%w(R2 L2 U2 D2 F2 B2))
+    output = @cube.dump_cube
+    puts(output)
+    expect(output).to be_an_instance_of Array
+
+    if @dimension == 2
+      validate_dump
+      return
+    end
+
+    expect(output[0]).to eq(checkerboard(%w(\  R), @dimension))
+    (1..@dimension - 2).each do |i|
+      expect(output[i]).to eq(checkerboard(%w(\  O), @dimension))
+    end
+    expect(output[@dimension - 1]).to eq(checkerboard(%w(\  R), @dimension))
+
+    r = @dimension
+    expect(output[r]).to eq(checkerboard(%w(B W G Y), @dimension))
+    (r + 1..r * 2 - 2).each do |i|
+      expect(output[i]).to eq(checkerboard(%w(G Y B W), @dimension))
+    end
+    expect(output[r * 2 - 1]).to eq(checkerboard(%w(B W G Y), @dimension))
+
+    r = @dimension * 2
+    expect(output[r]).to eq(checkerboard(%w(\  O), @dimension))
+    (r + 1..r * 3 - 2).each do |i|
+      expect(output[i]).to eq(checkerboard(%w(\  R), @dimension))
+    end
+    expect(output[r * 3 - 1]).to eq(checkerboard(%w(\  O), @dimension))
+  end
 end
 
 shared_examples_for Cube do
@@ -79,129 +111,163 @@ shared_examples_for Cube do
     end
   end
 
-  describe '#dump_cube' do
+  describe 'dump_cube' do
     it 'validates cube dump' do
       validate_dump
     end
   end
 
-  describe '#x_move' do
+  describe 'x_move' do
     it 'validates X move' do
       validate_x_move
     end
   end
 
-  describe '#x_invert_move' do
+  describe 'x_invert_move' do
     it "validates X' move" do
       validate_x_invert_move
     end
   end
 
-  describe '#y_move' do
+  describe 'y_move' do
     it 'validates Y move' do
       validate_y_move
     end
   end
 
-  describe '#y_invert_move' do
+  describe 'y_invert_move' do
     it "validates Y' move" do
       validate_y_invert_move
     end
   end
 
-  describe '#z_move' do
+  describe 'z_move' do
     it 'validates Z move' do
       validate_z_move
     end
   end
 
-  describe '#z_invert_move' do
+  describe 'z_invert_move' do
     it "validates Z' move" do
       validate_z_invert_move
     end
   end
 
-  describe '#f_move' do
+  describe 'f_move' do
     include_context 'FMoveTest'
     it 'validates F move' do
-      validate_f_move(false)
+      validate_f_move
     end
   end
 
-  describe '#f_invert_move' do
+  describe 'f_invert_move' do
     include_context 'FMoveTest'
     it "validates F' move" do
-      validate_f_move(true)
+      validate_f_move(invert: true)
     end
   end
 
-  describe '#b_move' do
+  describe 'f2_move' do
+    include_context 'FMoveTest'
+    it 'validates F2 move' do
+      validate_f_move(double: true)
+    end
+  end
+
+  describe 'b_move' do
     include_context 'BMoveTest'
     it 'validates B move' do
-      validate_b_move(false)
+      validate_b_move
     end
   end
 
-  describe '#b_invert_move' do
+  describe 'b_invert_move' do
     include_context 'BMoveTest'
     it "validates B' move" do
-      validate_b_move(true)
+      validate_b_move(invert: true)
     end
   end
 
-  describe '#r_move' do
+  describe 'b2_move' do
+    include_context 'BMoveTest'
+    it 'validates B2 move' do
+      validate_b_move(double: true)
+    end
+  end
+
+  describe 'r_move' do
     include_context 'RMoveTest'
     it 'validates R move' do
-      validate_r_move(false)
+      validate_r_move
     end
   end
 
-  describe '#r_invert_move' do
+  describe 'r_invert_move' do
     include_context 'RMoveTest'
     it "validates R' move" do
-      validate_r_move(true)
+      validate_r_move(invert: true)
     end
   end
 
-  describe '#l_move' do
+  describe 'l_move' do
     include_context 'LMoveTest'
     it 'validates L move' do
-      validate_l_move(false)
+      validate_l_move
     end
   end
 
-  describe '#l_invert_move' do
+  describe 'l_invert_move' do
     include_context 'LMoveTest'
     it "validates L' move" do
-      validate_l_move(true)
+      validate_l_move(invert: true)
     end
   end
 
-  describe '#u_move' do
+  describe 'u_move' do
     include_context 'UMoveTest'
     it 'validates U move' do
-      validate_u_move(false)
+      validate_u_move
     end
   end
 
-  describe '#u_invert_move' do
+  describe 'u_invert_move' do
     include_context 'UMoveTest'
     it "validates U' move" do
-      validate_u_move(true)
+      validate_u_move(invert: true)
     end
   end
 
-  describe '#d_move' do
+  describe 'u2_move' do
+    include_context 'UMoveTest'
+    it 'validates U2 move' do
+      validate_u_move(double: true)
+    end
+  end
+
+  describe 'd_move' do
     include_context 'DMoveTest'
     it 'validates D move' do
-      validate_d_move(false)
+      validate_d_move
     end
   end
 
-  describe '#d_invert_move' do
+  describe 'd_invert_move' do
     include_context 'DMoveTest'
     it "validates D' move" do
-      validate_d_move(true)
+      validate_d_move(invert: true)
+    end
+  end
+
+  describe 'd2_move' do
+    include_context 'DMoveTest'
+    it 'validates D2 move' do
+      validate_d_move(double: true)
+    end
+  end
+
+  describe 'checkerboard_move' do
+    it 'validates checkerboard move' do
+      validate_checkerboard_move
     end
   end
 end
