@@ -10,7 +10,7 @@ shared_context 'UMoveTest' do
     end
 
     r = @dimension
-    expect(output[r]).to eq(u_rotation_pattern(invert))
+    expect(output[r]).to eq(u_rotation_pattern(invert, double))
     (1..@dimension - 1).each do |index|
       expect(output[r + index]).to eq(single_color_per_face(%w(B W G Y)))
     end

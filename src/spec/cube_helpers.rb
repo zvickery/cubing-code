@@ -209,6 +209,13 @@ shared_examples_for Cube do
     end
   end
 
+  describe 'r2_move' do
+    include_context 'RMoveTest'
+    it 'validates R2 move' do
+      validate_r_move(double: true)
+    end
+  end
+
   describe 'l_move' do
     include_context 'LMoveTest'
     it 'validates L move' do
@@ -220,6 +227,13 @@ shared_examples_for Cube do
     include_context 'LMoveTest'
     it "validates L' move" do
       validate_l_move(invert: true)
+    end
+  end
+
+  describe 'l2_move' do
+    include_context 'LMoveTest'
+    it 'validates L2 move' do
+      validate_l_move(double: true)
     end
   end
 

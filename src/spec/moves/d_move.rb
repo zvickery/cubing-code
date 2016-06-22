@@ -13,7 +13,7 @@ shared_context 'DMoveTest' do
     (0..@dimension - 2).each do |index|
       expect(output[r + index]).to eq(single_color_per_face(%w(B W G Y)))
     end
-    expect(output[r + @dimension - 1]).to eq(d_rotation_pattern(invert))
+    expect(output[r + @dimension - 1]).to eq(d_rotation_pattern(invert, double))
 
     r = @dimension * 2
     (0..@dimension - 1).each do |index|
