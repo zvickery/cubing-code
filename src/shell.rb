@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './cube'
 require_relative './cube_moves'
 

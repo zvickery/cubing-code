@@ -1,5 +1,8 @@
+require_relative './move_common'
+
 # Define a B move
 class BMove
+  include MoveCommon
   def initialize(cube, logger)
     @cube = cube
     @logger = logger
@@ -33,5 +36,7 @@ class BMove
     (0..dim).each do |i|
       @cube.down.pieces[dim][i] = tmp[i]
     end
+
+    face_rotation(@cube.back, @cube.dimension)
   end
 end

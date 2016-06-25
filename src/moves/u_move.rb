@@ -1,5 +1,8 @@
+require_relative './move_common'
+
 # Define a U move
 class UMove
+  include MoveCommon
   def initialize(cube, logger)
     @cube = cube
     @logger = logger
@@ -32,5 +35,7 @@ class UMove
     (0..dim).each do |i|
       @cube.left.pieces[0][i] = tmp[i]
     end
+
+    face_rotation(@cube.up, @cube.dimension)
   end
 end

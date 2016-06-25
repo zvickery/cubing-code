@@ -1,5 +1,8 @@
+require_relative './move_common'
+
 # Define a R move
 class RMove
+  include MoveCommon
   def initialize(cube, logger)
     @cube = cube
     @logger = logger
@@ -33,5 +36,7 @@ class RMove
     (0..dim).each do |i|
       @cube.back.pieces[i][0] = tmp[i]
     end
+
+    face_rotation(@cube.right, @cube.dimension)
   end
 end
