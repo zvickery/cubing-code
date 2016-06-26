@@ -17,15 +17,27 @@ module MoveCommon
   def rotate_edges(face, dimension)
     return unless dimension > 2
     dim = dimension - 1
+    mid = dim - 1
 
     temp = []
-    (1..dim - 1).each { |i| temp.push(face.pieces[0][i]) }
-    (1..dim - 1).each do |i|
-      rev = (i + dim + (dim - 1) * i) % dim + 1
+    (1..mid).each { |i| temp.push(face.pieces[0][i]) }
+    (1..mid).each do |i|
+      rev = reverse(dimension, i)
       face.pieces[0][i] = face.pieces[rev][0]
     end
-    (1..dim - 1).each { |i| face.pieces[i][0] = face.pieces[dim][i] }
-    (1..dim - 1).each { |i| face.pieces[dim][i] = face.pieces[i][dim] }
-    (1..dim - 1).each { |i| face.pieces[i][dim] = temp.shift }
+    (1..mid).each { |i| face.pieces[i][0] = face.pieces[dim][i] }
+    (1..mid).each do |i|
+      rev = reverse(dimension, i)
+      face.pieces[dim][i] = face.pieces[rev][dim]
+    end
+    (1..mid).each { |i| face.pieces[i][dim] = temp.shift }
+  end
+
+  def reverse(dimension, index)
+    count = 0
+    (dimension - 1).downto(0).each do |i|
+      return i if index == count
+      count += 1
+    end
   end
 end

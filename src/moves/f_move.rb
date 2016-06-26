@@ -23,7 +23,7 @@ class FMove
 
     # Build new down face
     (0..dim).each do |i|
-      rev = (i + dim + (dim - 1) * i) % dim + 1
+      rev = reverse(@cube.dimension, i)
       @cube.down.pieces[0][i] = @cube.right.pieces[rev][0]
     end
 

@@ -23,7 +23,7 @@ class LMove
 
     # Build new back face
     (0..dim).each do |i|
-      rev = (i + dim + (dim - 1) * i) % dim + 1
+      rev = reverse(@cube.dimension, i)
       @cube.back.pieces[i][dim] = @cube.down.pieces[rev][0]
     end
 

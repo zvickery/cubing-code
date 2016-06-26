@@ -28,7 +28,7 @@ class BMove
 
     # Build new right face
     (0..dim).each do |i|
-      rev = (i + dim + (dim - 1) * i) % dim + 1
+      rev = reverse(@cube.dimension, i)
       @cube.right.pieces[i][dim] = @cube.down.pieces[dim][rev]
     end
 

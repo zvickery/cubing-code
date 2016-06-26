@@ -68,7 +68,6 @@ module CubeHelpers
   def validate_checkerboard_move
     @moves.make_move(%w(R2 L2 U2 D2 F2 B2))
     output = @cube.dump_cube
-    puts(output)
     expect(output).to be_an_instance_of Array
 
     if @dimension == 2
@@ -91,10 +90,10 @@ module CubeHelpers
 
     r = @dimension * 2
     expect(output[r]).to eq(checkerboard(%w(\  O), @dimension))
-    (r + 1..r * 3 - 2).each do |i|
+    (r + 1..r + @dimension - 2).each do |i|
       expect(output[i]).to eq(checkerboard(%w(\  R), @dimension))
     end
-    expect(output[r * 3 - 1]).to eq(checkerboard(%w(\  O), @dimension))
+    expect(output[@dimension * 3 - 1]).to eq(checkerboard(%w(\  O), @dimension))
   end
 end
 
