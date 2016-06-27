@@ -52,8 +52,8 @@ class CubeMoves
   def add_move(code, function)
     [code.upcase, code.downcase].each do |coded|
       @moves[coded] = function
-      @moves["#{code}2"] = add_multi_move(@moves[coded], 2)
-      @moves["#{code}'"] = add_multi_move(@moves[coded], 3)
+      @moves["#{coded}2"] = add_multi_move(@moves[coded], 2)
+      @moves["#{coded}'"] = add_multi_move(@moves[coded], 3)
     end
   end
 end

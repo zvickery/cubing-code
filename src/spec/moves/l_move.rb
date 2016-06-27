@@ -16,7 +16,8 @@ shared_context 'LMoveTest' do
 
     r = @dimension * 2
     (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(l_rotation_pattern_one(false, invert, double))
+      ri = r + index
+      expect(output[ri]).to eq(l_rotation_pattern_one(false, invert, double))
     end
   end
 

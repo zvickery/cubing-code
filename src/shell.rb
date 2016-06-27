@@ -7,23 +7,28 @@ class CubeCli
   HELP_TEXT = "You'll just have to support yourself!".freeze
   NO_CUBE = "Cube not defined.  Try 'c 3' to make one.".freeze
 
+  def initialize
+    @cli_commands = {
+      'c' => -> (params) { cube(*params) },
+      'cube' => -> (params) { cube(*params) },
+      'd' => -> (_) { dump },
+      'dump' => -> (_) { dump },
+      'exit' => -> (_) { break },
+      'help' => -> (_) { puts HELP_TEXT },
+      'm' => -> (params) { move(*params) },
+      'move' => -> (params) { move(*params) }
+    }
+  end
+
   def run_cli
     loop do
       command, *params = read_cli_command
       next unless command
 
-      case command
-      when /\Ahelp\z/i
-        puts HELP_TEXT
-      when /\Aexit\z/i
-        break
-      when /\Acube\z/i, /\Ac\z/i
-        cube(*params)
-      when /\Amove\z/i, /\Am\z/i
-        move(*params)
-      when /\Adump\z/i, /\Ad\z/i
-        dump
-      else puts 'Invalid command' if command
+      if @cli_commands.key?(command)
+        @cli_commands[command][params]
+      elsif command
+        puts 'Invalid command'
       end
     end
   rescue Interrupt
