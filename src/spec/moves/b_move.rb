@@ -9,7 +9,10 @@ shared_context 'BMoveTest' do
                   else
                     invert ? %w(\  B) : %w(\  G)
                   end
+    validate_b_pattern(output, first_color, invert)
+  end
 
+  def validate_b_pattern(output, first_color, invert)
     expect(output[0]).to eq(single_color_per_face(first_color))
     (1..@dimension - 2).each do |index|
       expect(output[index]).to eq(single_color_per_face(%w(\  R)))

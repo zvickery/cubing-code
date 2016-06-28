@@ -9,7 +9,10 @@ shared_context 'FMoveTest' do
                   else
                     invert ? %w(\  G) : %w(\  B)
                   end
+    validate_f_pattern(output, first_color, invert, double)
+  end
 
+  def validate_f_pattern(output, first_color, invert, double)
     (0..@dimension - 2).each do |index|
       expect(output[index]).to eq(single_color_per_face(%w(\  R)))
     end

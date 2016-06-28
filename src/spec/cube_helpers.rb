@@ -75,6 +75,10 @@ module CubeHelpers
       return
     end
 
+    validate_checkerboard_pattern(output)
+  end
+
+  def validate_checkerboard_pattern(output)
     expect(output[0]).to eq(checkerboard(%w(\  R), @dimension))
     (1..@dimension - 2).each do |i|
       expect(output[i]).to eq(checkerboard(%w(\  O), @dimension))

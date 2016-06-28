@@ -16,7 +16,8 @@ shared_context 'RMoveTest' do
 
     r = @dimension * 2
     (0..@dimension - 1).each do |index|
-      expect(output[r + index]).to eq(r_rotation_pattern_one(false, invert, double))
+      ri = r + index
+      expect(output[ri]).to eq(r_rotation_pattern_one(false, invert, double))
     end
   end
 
@@ -35,16 +36,16 @@ shared_context 'RMoveTest' do
 
   def get_variant_color_one(top, invert, double)
     if double
-      if top
-        'O'
-      else
-        'R'
-      end
+      get_variant_color_one_double(top)
     elsif invert
       top ? 'Y' : 'W'
     else
       top ? 'W' : 'Y'
     end
+  end
+
+  def get_variant_color_one_double(top)
+    top ? 'O' : 'R'
   end
 
   def r_rotation_pattern_four(invert = false, double = false)

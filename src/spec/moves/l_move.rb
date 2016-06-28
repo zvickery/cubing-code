@@ -36,16 +36,16 @@ shared_context 'LMoveTest' do
 
   def get_variant_color_one(top, invert, double)
     if double
-      if top
-        'O'
-      else
-        'R'
-      end
+      get_variant_color_one_double(top)
     elsif invert
       top ? 'W' : 'Y'
     else
       top ? 'Y' : 'W'
     end
+  end
+
+  def get_variant_color_one_double(top)
+    top ? 'O' : 'R'
   end
 
   def l_rotation_pattern_four(invert = false, double = false)
