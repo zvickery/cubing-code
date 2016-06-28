@@ -13,7 +13,7 @@ class CubeCli
       'cube' => -> (params) { cube(*params) },
       'd' => -> (_) { dump },
       'dump' => -> (_) { dump },
-      'exit' => -> (_) { break },
+      'exit' => -> (_) { raise Interrupt, 'Exit requested' },
       'help' => -> (_) { puts HELP_TEXT },
       'm' => -> (params) { move(*params) },
       'move' => -> (params) { move(*params) }
@@ -31,8 +31,8 @@ class CubeCli
         puts 'Invalid command'
       end
     end
-  rescue Interrupt
-    puts
+  rescue Interrupt => e
+    puts if e.message.include?('EOF')
   end
 
   def read_cli_command

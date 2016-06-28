@@ -1,9 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    ansi (1.5.0)
     ast (2.3.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    hirb (0.7.3)
     json (1.8.3)
     parser (2.3.1.2)
       ast (~> 2.2)
@@ -34,6 +36,10 @@ GEM
       docile (~> 1.1.0)
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
+    simplecov-console (0.3.0)
+      ansi
+      hirb
+      simplecov
     simplecov-html (0.10.0)
     unicode-display_width (1.0.5)
 
@@ -45,6 +51,7 @@ DEPENDENCIES
   rspec
   rubocop
   simplecov
+  simplecov-console
 
 BUNDLED WITH
    1.12.5
