@@ -25,8 +25,12 @@ class Cube
   attr_accessor :dimension, :front, :back, :left, :right, :up, :down
 
   def initialize(dimension)
-    @dimension = dimension
+    @dimension = Integer(dimension)
     @faces = {}
+
+    raise ArgumentError,
+          "Dimension #{dimension} unsupported" unless @dimension >= 2
+
     build_faces
   end
 

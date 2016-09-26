@@ -99,6 +99,23 @@ module CubeHelpers
     end
     expect(output[@dimension * 3 - 1]).to eq(checkerboard(%w(\  O), @dimension))
   end
+
+  def validate_flower_move
+    @moves.make_move(%w(u d' l' r f b' u d'))
+    output = @cube.dump_cube
+    expect(output).to be_an_instance_of Array
+
+    if @dimension == 2
+      validate_dump
+      return
+    end
+
+    expect(output[0]).to eq(single_color_per_face(%w(\  W)))
+    expect(output[1]).to eq(single_color_per_face(%w(\  W)))
+    expect(output[2]).to eq(single_color_per_face(%w(\  W)))
+    expect(output[@dimension]).to eq(single_color_per_face(middle))
+    expect(output[@dimension * 2]).to eq(single_color_per_face(bottom))
+  end
 end
 
 shared_examples_for Cube do
